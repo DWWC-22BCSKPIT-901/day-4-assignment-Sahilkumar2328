@@ -1,0 +1,41 @@
+#include <iostream>
+#include <vector>
+#include <stack>
+#include <algorithm>
+using namespace std;
+
+int calculateSi(int M1, int M2) {
+    return (((M1 ^ M2) ^ (M1 | M2)) & (M1 ^ M2));
+}
+
+int findMaxSi(const vector<int>& A) {
+    int N = A.size();
+    stack<int> st;
+    int maxSi = 0;
+
+    for (int i = 0; i < N; ++i) {
+        while (!st.empty() && A[st.top()] > A[i]) {
+            int M2 = A[st.top()];
+            st.pop();
+            if (!st.empty()) {
+                int M1 = A[st.top()];
+                maxSi = max(maxSi, calculateSi(M1, M2));
+            }
+        }
+        st.push(i);
+    }
+
+    return maxSi;
+}
+
+int main() {
+    int N;
+    cin >> N;
+    vector<int> A(N);
+    for (int i = 0; i < N; ++i) {
+        cin >> A[i];
+    }
+
+    cout << findMaxSi(A) << endl;
+    return 0;
+}
