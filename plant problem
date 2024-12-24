@@ -1,0 +1,40 @@
+#include <vector>
+#include <stack>
+#include <iostream>
+#include <algorithm>
+using namespace std;
+
+int poisonousPlants(vector<int>& p) {
+    int n = p.size();
+    vector<int> days(n, 0);
+    stack<int> st;
+    int max_days = 0;
+
+    for (int i = 0; i < n; ++i) {
+        while (!st.empty() && p[i] <= p[st.top()]) {
+            st.pop();
+        }
+
+        if (!st.empty()) {
+            days[i] = days[st.top()] + 1;
+        }
+
+        st.push(i);
+        max_days = max(max_days, days[i]);
+    }
+
+    return max_days;
+}
+
+int main() {
+    int n;
+    cin >> n;
+    vector<int> p(n);
+
+    for (int i = 0; i < n; ++i) {
+        cin >> p[i];
+    }
+
+    cout << poisonousPlants(p) << endl;
+    return 0;
+}
